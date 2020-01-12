@@ -14,22 +14,58 @@ child_process = require 'child_process'
 remocon_command_send = "bin/pi-send.sh"
 remocon_command_list = "bin/pi-list.sh"
 
+send_sig = (signal_name, res) ->
+  child_process.exec "#{remocon_command_send} #{signal_name}", (error, stdout, stderr) ->
+    if error?
+      res.reply "error on send #{signal_name}: " + stderr + ""
+
+str_contains = (sup, sub) ->
+  sup.indexOf(sub) != -1
+
 module.exports = (robot) ->
   robot.respond /myecho (.+)/i, (res) ->
     res.reply res.match[1]
 
   robot.respond /send ([a-z0-9_]+)/i, (res) ->
     signal = res.match[1]
-    child_process.exec "#{remocon_command_send} #{signal}", (error, stdout, stderr) ->
-      if error?
-        res.reply "error on send #{signal}: " + stderr + ""
+    send_sig signal, res
   
+  robot.respond /lookup_send (.+)/i, (res) ->
+    phrase = res.match[1]
+    # TODO: config file
+    if str_contains(phrase, '電気')
+      if str_contains(phrase, 'つけ') or str_contains(phrase, 'オン')
+        send_sig 'okulight_on', res
+      else if str_contains(phrase, '消') or str_contains(phrase, 'オフ')
+        send_sig 'okulight_off', res
+    else if str_contains(phrase, 'エアコン')
+      if str_contains(phrase, '消') or str_contains(phrase, 'オフ')
+        send_sig 'ac_off', res
+      else if str_contains(phrase, '自動') or str_contains(phrase, 'オート')
+        send_sig 'ac_auto', res
+      else if str_contains(phrase, 'ドライ')
+        send_sig 'ac_dry', res
+      else if str_contains(phrase, '20')
+        send_sig 'ac_20', res
+      else if str_contains(phrase, '21')
+        send_sig 'ac_21', res
+      else if str_contains(phrase, '26')
+        send_sig 'ac_26', res
+      else if str_contains(phrase, '27')
+        send_sig 'ac_27', res
+    else if str_contains(phrase, 'テレビ')
+      send_sig 'tv', res
+    else
+      res.reply "unknown phrase: #{phrase}"
+
   robot.respond /list/i, (res) ->
     child_process.exec "#{remocon_command_list}", (error, stdout, stderr) ->
       if error?
         res.reply "error on list: " + stderr + ""
       else
         res.reply stdout + ''
+  
+
 
   # robot.hear /badger/i, (res) ->
   #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
