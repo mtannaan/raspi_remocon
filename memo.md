@@ -68,3 +68,27 @@ sudo systemctl start pigpiod
 下記の記事の通りにirrp.pyを編集して、長い信号を圧縮して記録するようにした。
 
 https://korintje.com/blog/2019/02/04/00/24/33/
+
+## 使い方
+### 準備
+- pidpiodをserviceとして起動しておく
+- `cd path/to/this/directory`
+- `bin/prepare_gpio.sh`
+
+### 学習
+- `bin/pi-learn.sh (signal_name)`
+
+### 学習した信号のリストアップ・削除
+- `bin/pi-list.py`
+- `bin/pi-remove.py signal_name [signal_name_2 ...]`
+
+### 学習した信号の送信
+- `bin/pi-send.sh signal_name`
+
+### チャットボットとして動かす
+- Slackにhubotを追加
+- トークンをdata/tokenに保存
+- `bin/run.sh`
+
+### チャットボットをサービス化
+- TODO
