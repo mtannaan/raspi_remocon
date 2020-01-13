@@ -48,6 +48,18 @@ https://qiita.com/takjg/items/e6b8af53421be54b62c9
 元の回路からの変更点として、(赤外線LED + 27Ω抵抗) を2つ並列に繋いだ。
 制御対象の装置によっては指向性が厳しいため。
 
+赤外線受光器の入力は、配線の都合でGPIO18から9に変更。
+
+## 寸法
+- 基板は30mm(microUSBやminiHDMIがでっぱる +2mm) x 65mm (microSDでっぱる +3mm, アンテナでっぱる +2mm)
+- 基板間の高さはPi Zero WHの取り付け済みヘッダ + 購入したピンソケット (Useconn FH-2x20SG) を合わせて11mm
+- 基板の端からmicroUSBやminiHDMIの端子の端までは7mm
+
+###　ねじ穴
+https://www.amazon.co.jp/%E3%82%B5%E3%83%B3%E3%83%8F%E3%83%A4%E3%83%88-Raspberry-Pi%E7%94%A8%E3%82%B9%E3%83%9A%E3%83%BC%E3%82%B5%E3%83%BC-%E9%BB%84%E9%8A%85%E8%A3%BD-MPS-M2611/dp/B01ARIIQEG/ref=pd_ybh_a_11?_encoding=UTF8&psc=1&refRID=24PE2C9C3RAHP4PQW3N2
+
+穴はM2.6
+
 ## pigpioの設定
 [pigpio](http://abyz.me.uk/rpi/pigpio/)を用いてGPIOの制御を行った。
 
