@@ -1,0 +1,13 @@
+[Unit]
+Description=Cool bot for my home
+After=pigpiod.service
+Requires=pigpiod.service
+
+[Service]
+Type=simple
+ExecStart=/home/pi/pi_remocon/homebot/bin/run.sh
+WorkingDirectory=/home/pi/pi_remocon/homebot
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

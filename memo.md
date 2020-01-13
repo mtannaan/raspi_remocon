@@ -40,10 +40,13 @@ SSHでログインして、`sudo raspi-config`でパスワードの変更とVNC�
 
 VNCの解像度がとても低いので、VNCでログイン後、GUIの設定画面（画面左上のメニュー）から解像度を変更した。
 
-## 部品とか
+## 部品、回路
 基本的に下記を参考にした。
 
 https://qiita.com/takjg/items/e6b8af53421be54b62c9
+
+元の回路からの変更点として、(赤外線LED + 27Ω抵抗) を2つ並列に繋いだ。
+制御対象の装置によっては指向性が厳しいため。
 
 ## pigpioの設定
 [pigpio](http://abyz.me.uk/rpi/pigpio/)を用いてGPIOの制御を行った。
@@ -88,7 +91,13 @@ https://korintje.com/blog/2019/02/04/00/24/33/
 ### チャットボットとして動かす
 - Slackにhubotを追加
 - トークンをdata/tokenに保存
-- `bin/run.sh`
+- IFTTTでgoogle assistantで'リモコン'で始まるフレーズの後半をslackに投稿するように設定
+- フレーズ後半の内容をもとにpi-send.shを叩くスクリプト (homebot.coffee) を作成
+- `bin/run.sh` で実行
 
 ### チャットボットをサービス化
-- TODO
+sudoで次を実行
+
+- `sudo systemctl link path/to/homebot.service`
+- `systemctl enable homebot`
+- `systemctl start homebot`
