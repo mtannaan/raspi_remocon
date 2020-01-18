@@ -1,0 +1,63 @@
+- sig: okulight_on
+  phrases:
+    - and:
+      - 電気
+      - つけ
+    - and:
+      - 電気
+      - オン
+- sig: okulight_off
+  phrases:
+    - and:
+      - 電気
+      - 消
+    - and:
+      - 電気
+      - オフ
+- sig: ac_off
+  phrases:
+    - and:
+      - エアコン
+      - 消
+    - and:
+      - エアコン
+      - オフ
+    - and:
+      - エアコン
+      - 切
+- sig: ac_auto
+  phrases:
+    - and:
+      - エアコン
+      - 自動
+    - and:
+      - エアコン
+      - オート
+- sig: ac_dry
+  phrases:
+    - and:
+      - エアコン
+      - ドライ
+- sig: ac_20
+  phrases:
+    - and:
+      - エアコン
+      - 20
+- sig: ac_21
+  phrases:
+    - and:
+      - エアコン
+      - 21
+- sig: ac_26
+  phrases:
+    - and:
+      - エアコン
+      - 26
+- sig: ac_27
+  phrases:
+    - and:
+      - エアコン
+      - 27
+- sig: tv
+  phrases:
+    - テレビ
