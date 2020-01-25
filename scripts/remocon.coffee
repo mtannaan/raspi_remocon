@@ -6,21 +6,46 @@
 #   wouldn't be useful and amusing enough for day to day huboting.
 #   Uncomment the ones you want to try and experiment with.
 #
-#   These are from the scripting documentation: https://github.com/github/hubot/blob/master/docs/scripting.md
+#   These are from the scripting documentation:
+#   https://github.com/github/hubot/blob/master/docs/scripting.md
 
 # for executing external commands
 child_process = require 'child_process'
 
+YAML = require 'yamljs'
+
 remocon_command_send = "bin/pi-send.sh"
 remocon_command_list = "bin/pi-list.sh"
+phrase_dict_file = "data/dict.yaml"
 
 send_sig = (signal_name, res) ->
   child_process.exec "#{remocon_command_send} #{signal_name}", (error, stdout, stderr) ->
     if error?
       res.reply "error on send #{signal_name}: " + stderr + ""
+    else
+      res.reply "りょ"
 
 str_contains = (sup, sub) ->
   sup.indexOf(sub) != -1
+
+match_phrase = (phrasedef, phrase) ->
+  if phrasedef.and?
+    return phrasedef.and.every((ph) -> match_phrase(ph, phrase))
+  else
+    return str_contains phrase, phrasedef
+
+match_single_sig = (sigdef, phrase) ->
+  for phrasedef in sigdef.phrases
+    if match_phrase phrasedef, phrase
+      return sigdef.sig
+  return null
+
+get_sig = (phrase) ->
+  sigdefs = YAML.load(phrase_dict_file)
+  for sigdef in sigdefs
+    sig = match_single_sig sigdef, phrase
+    return sig if sig
+  return null
 
 module.exports = (robot) ->
   robot.respond /myecho (.+)/i, (res) ->
@@ -32,29 +57,9 @@ module.exports = (robot) ->
   
   robot.respond /lookup_send (.+)/i, (res) ->
     phrase = res.match[1]
-    # TODO: config file
-    if str_contains(phrase, '電気')
-      if str_contains(phrase, 'つけ') or str_contains(phrase, 'オン')
-        send_sig 'okulight_on', res
-      else if str_contains(phrase, '消') or str_contains(phrase, 'オフ')
-        send_sig 'okulight_off', res
-    else if str_contains(phrase, 'エアコン')
-      if str_contains(phrase, '消') or str_contains(phrase, 'オフ')
-        send_sig 'ac_off', res
-      else if str_contains(phrase, '自動') or str_contains(phrase, 'オート')
-        send_sig 'ac_auto', res
-      else if str_contains(phrase, 'ドライ')
-        send_sig 'ac_dry', res
-      else if str_contains(phrase, '20')
-        send_sig 'ac_20', res
-      else if str_contains(phrase, '21')
-        send_sig 'ac_21', res
-      else if str_contains(phrase, '26')
-        send_sig 'ac_26', res
-      else if str_contains(phrase, '27')
-        send_sig 'ac_27', res
-    else if str_contains(phrase, 'テレビ')
-      send_sig 'tv', res
+    sig = get_sig phrase
+    if sig
+      send_sig sig, res
     else
       res.reply "unknown phrase: #{phrase}"
 
@@ -97,11 +102,11 @@ module.exports = (robot) ->
   # robot.leave (res) ->
   #   res.send res.random leaveReplies
   #
-  # answer = process.env.HUBOT_ANSWER_TO_THE_ULTIMATE_QUESTION_OF_LIFE_THE_UNIVERSE_AND_EVERYTHING
+  # answer = process.env.HUBOT_ANSWER_TO_THE_ULTIMATE
   #
   # robot.respond /what is the answer to the ultimate question of life/, (res) ->
   #   unless answer?
-  #     res.send "Missing HUBOT_ANSWER_TO_THE_ULTIMATE_QUESTION_OF_LIFE_THE_UNIVERSE_AND_EVERYTHING in environment: please set and try again"
+  #     res.send "Missing HUBOT_ANSWER_TO_THE_ULTIMATE in environment: please set and try again"
   #     return
   #   res.send "#{answer}, but what is the question?"
   #

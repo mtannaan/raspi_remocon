@@ -48,7 +48,7 @@ https://qiita.com/takjg/items/e6b8af53421be54b62c9
 元の回路からの変更点として、(赤外線LED + 27Ω抵抗) を2つ並列に繋いだ。
 制御対象の装置によっては指向性が厳しいため。
 
-赤外線受光器の入力は、配線の都合でGPIO18から9に変更。
+赤外線受光器からの入力は、配線の都合でGPIO18から9に変更。
 
 ## 寸法
 - 基板は30mm(microUSBやminiHDMIがでっぱる +2mm) x 65mm (microSDでっぱる +3mm, アンテナでっぱる +2mm)
@@ -103,8 +103,8 @@ https://korintje.com/blog/2019/02/04/00/24/33/
 ### チャットボットとして動かす
 - Slackにhubotを追加
 - トークンをdata/tokenに保存
-- IFTTTでgoogle assistantで'リモコン'で始まるフレーズの後半をslackに投稿するように設定
-- フレーズ後半の内容をもとにpi-send.shを叩くスクリプト (homebot.coffee) を作成
+- IFTTTでgoogle assistantから特定のフレーズをslackに投稿するように設定
+- フレーズの内容をもとにpi-send.shを叩くスクリプト (homebot.coffee) を作成
 - `bin/run.sh` で実行
 
 ### チャットボットをサービス化
@@ -113,3 +113,5 @@ sudoで次を実行
 - `sudo systemctl link path/to/homebot.service`
 - `systemctl enable homebot`
 - `systemctl start homebot`
+
+以降、ラズパイの起動時に自動的にbotが立ち上がる

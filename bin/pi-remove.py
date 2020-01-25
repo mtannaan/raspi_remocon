@@ -1,5 +1,11 @@
 #!/usr/bin/python3
 
+"""
+Forgets IR signal with specifed name.
+
+usage: python pi-remove.py signal_name_1 [signal_name_2 ...]
+"""
+
 import sys
 import os
 import json
